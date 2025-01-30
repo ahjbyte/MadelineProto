@@ -31,6 +31,7 @@ for f in 192.168.1.10 192.168.69.236 192.168.69.233 192.168.69.207 192.168.69.13
 done
 
 arches="amd64 arm64 riscv64"
+arches="amd64 arm64"
 
 echo "Building for $arches"
 

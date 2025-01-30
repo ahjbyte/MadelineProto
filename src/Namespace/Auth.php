@@ -47,7 +47,7 @@ interface Auth
      *
      * @param string $phone_number The phone number
      * @param string $phone_code_hash The phone code hash obtained from [auth.sendCode](https://docs.madelineproto.xyz/API_docs/methods/auth.sendCode.html)
-     * @param string $reason
+     * @param string $reason Official clients only, used if the device integrity verification failed, and no secret could be obtained to invoke [auth.requestFirebaseSms](https://docs.madelineproto.xyz/API_docs/methods/auth.requestFirebaseSms.html): in this case, the device integrity verification failure reason must be passed here.
      * @param ?int $floodWaitLimit Can be used to specify a custom flood wait limit: if a FLOOD_WAIT_ rate limiting error is received with a waiting period bigger than this integer, an RPCErrorException will be thrown; otherwise, MadelineProto will simply wait for the specified amount of time. Defaults to the value specified in the settings: https://docs.madelineproto.xyz/PHP/danog/MadelineProto/Settings/RPC.html#setfloodtimeout-int-floodtimeout-self
      * @param ?string $queueId If specified, ensures strict server-side execution order of concurrent calls with the same queue ID.
      * @param ?\Amp\Cancellation $cancellation Cancellation
@@ -149,7 +149,7 @@ interface Auth
      * @param string $phone_number Phone number
      * @param string $phone_code_hash Phone code hash returned by [auth.sendCode](https://docs.madelineproto.xyz/API_docs/methods/auth.sendCode.html)
      * @param string $safety_net_token On Android, a JWS object obtained as described in the [auth documentation »](https://core.telegram.org/api/auth)
-     * @param string $play_integrity_token
+     * @param string $play_integrity_token On Android, an object obtained as described in the [auth documentation »](https://core.telegram.org/api/auth)
      * @param string $ios_push_secret Secret token received via an apple push notification
      * @param ?int $floodWaitLimit Can be used to specify a custom flood wait limit: if a FLOOD_WAIT_ rate limiting error is received with a waiting period bigger than this integer, an RPCErrorException will be thrown; otherwise, MadelineProto will simply wait for the specified amount of time. Defaults to the value specified in the settings: https://docs.madelineproto.xyz/PHP/danog/MadelineProto/Settings/RPC.html#setfloodtimeout-int-floodtimeout-self
      * @param ?string $queueId If specified, ensures strict server-side execution order of concurrent calls with the same queue ID.
@@ -170,8 +170,11 @@ interface Auth
     public function resetLoginEmail(string|null $phone_number = '', string|null $phone_code_hash = '', ?int $floodWaitLimit = null, ?string $queueId = null, ?\Amp\Cancellation $cancellation = null): array;
 
     /**
+     * Official apps only, reports that the SMS authentication code wasn't delivered.
      *
-     *
+     * @param string $phone_number Phone number where we were supposed to receive the code
+     * @param string $phone_code_hash The phone code hash obtained from [auth.sendCode](https://docs.madelineproto.xyz/API_docs/methods/auth.sendCode.html)
+     * @param string $mnc [MNC](https://en.wikipedia.org/wiki/Mobile_country_code) of the current network operator.
      * @param ?int $floodWaitLimit Can be used to specify a custom flood wait limit: if a FLOOD_WAIT_ rate limiting error is received with a waiting period bigger than this integer, an RPCErrorException will be thrown; otherwise, MadelineProto will simply wait for the specified amount of time. Defaults to the value specified in the settings: https://docs.madelineproto.xyz/PHP/danog/MadelineProto/Settings/RPC.html#setfloodtimeout-int-floodtimeout-self
      * @param ?string $queueId If specified, ensures strict server-side execution order of concurrent calls with the same queue ID.
      * @param ?\Amp\Cancellation $cancellation Cancellation
