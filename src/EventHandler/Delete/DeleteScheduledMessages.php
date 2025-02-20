@@ -27,10 +27,14 @@ final class DeleteScheduledMessages extends Delete
     /** Peer */
     public readonly int $chatId;
 
+    /** @var list<int> Whether this update indicates that some scheduled messages were sent (not simply deleted from the schedule queue). In this case, the `messages` field will contain the scheduled message IDs for the sent messages (initially returned in [updateNewScheduledMessage](https://docs.madelineproto.xyz/API_docs/constructors/updateNewScheduledMessage.html)), and `sent_messages` will contain the real message IDs for the sent messages. */
+    public readonly array $sentMessages;
+
     /** @internal */
     public function __construct(MTProto $API, array $rawDelete)
     {
         parent::__construct($API, $rawDelete);
         $this->chatId = $API->getIdInternal($rawDelete['peer']);
+        $this->chatId = $rawDelete['sent_messages'] ?? [];
     }
 }
